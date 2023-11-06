@@ -2,20 +2,31 @@ import typing
 
 class ScrapeResult:
 
-    def __init__(self):
+    def __init__(self, ip_address, response_time, region, links):
         print('ScrapeResult initialised')
 
-        # Response time: time from sending the request to receiving the reply
-        # Data type: int/float?
-        self.response_time = None
-
         # IP address of the server
-        # Data type: str (could use ipaddress python module but lazy)
-        self.server_ip = None
+        # Data type: str
+        self.server_ip = ip_address
+
+        # Response time: time from sending the request to receiving the reply
+        # Data type: float
+        self.response_time = response_time
 
         # Region of the server
         # Data type: str
-        self.server_region = None
+        self.server_region = region
+
+        # Links found in the html
+        # Data type: list of str
+        self.links = links
 
         # Open ended requirement, still TBC (read assignment doc page 1)
         # Considering a dictionary mapping some search terms to their frequency of occurance
+    
+    def __str__(self):
+        first = (f"IP Address: {self.server_ip}\n"
+                f"Response Time: {self.response_time}\n"
+                f"Server Region: {self.server_region}\n"
+                f"Links:\n")
+        return first + "\n".join(self.links)
