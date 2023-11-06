@@ -80,8 +80,3 @@ class Scraper:
             return ip_address
         except (socket.gaierror, ValueError):
             return None
-
-scraper = Scraper("http://wikipedia.com", [])
-links = scraper.scrape().links
-for link in links:
-    print(link)
