@@ -42,8 +42,7 @@ class Scraper:
 
         soup = BeautifulSoup(response.text, 'html.parser')
 
-        links = Scraper.extract_links_from_response(soup)
-        links = [urllib.parse.urljoin(self.url, link) for link in links]
+        links = Scraper.extract_links_from_response(soup, self.url)
 
         search_terms_result = Scraper.find_search_terms(soup, self.search_terms)
 
@@ -65,15 +64,17 @@ class Scraper:
             print(f"An error occurred while making the request: {e}")
             return None
 
-    def extract_links_from_response(soup):
+    def extract_links_from_response(soup, base_url):
         # Find all <a> tags in the parsed HTML
-        links = []
+        links = set()
         for link in soup.find_all('a'):
             href = link.get('href')
             if href and href != "#":
-                links.append(href)
+                remove_fragment = urllib.parse.urlparse(href)._replace(fragment="").geturl()
+                absolute_url = urllib.parse.urljoin(base_url, remove_fragment)
+                links.add(absolute_url)
 
-        return links
+        return list(links)
 
     def get_ip_address(url):
         try:
@@ -91,6 +92,6 @@ class Scraper:
         return result
 
 if __name__ == "__main__":
-    scraper = Scraper("https://www.google.com", ["Google", "JFESE"])
+    scraper = Scraper("https://www.wikipedia.com", ["Google", "JFESE"])
     result = scraper.scrape()
     print(result)
