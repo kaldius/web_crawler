@@ -6,6 +6,8 @@ import urllib.parse # to parse hostname given url
 import requests # to send http requests
 import time # to get response time
 from bs4 import BeautifulSoup # to parse the webpage
+from ip2geotools.databases.noncommercial import DbIpCity
+# from geopy.distance import distance
 
 from ScrapeResult import ScrapeResult
 
@@ -32,13 +34,12 @@ class Scraper:
         response = tmp[0]
         response_time = tmp[1]
 
-        print(f"IP Address: {ip_address}")
-        print(f"Response time: {response_time}")
+        geo_location = DbIpCity.get(ip_address, api_key="free")
 
         links = Scraper.extract_links_from_response(response)
         links = [urllib.parse.urljoin(self.url, link) for link in links]
 
-        return ScrapeResult(ip_address, response_time, links)
+        return ScrapeResult(ip_address, response_time, geo_location.region, links)
         # send the necessary http requests,
         # parse http response and search for search_terms and their frequency of occurance,
         # get geolocation data,
@@ -80,3 +81,8 @@ class Scraper:
             return ip_address
         except (socket.gaierror, ValueError):
             return None
+
+
+scraper = Scraper("https://www.mit.edu", [])
+result = scraper.scrape()
+print(result)
