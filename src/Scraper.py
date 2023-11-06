@@ -83,6 +83,7 @@ class Scraper:
             return None
 
 
-scraper = Scraper("https://www.mit.edu", [])
-result = scraper.scrape()
-print(result)
+if __name__ == "__main__":
+    scraper = Scraper("https://www.mit.edu", [])
+    result = scraper.scrape()
+    print(result)

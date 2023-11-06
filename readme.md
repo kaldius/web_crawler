@@ -1,8 +1,14 @@
-CS3103 Web Crawler
+# CS3103 Web Crawler
 
-need run 
-``` 
-pip install requests
-pip install beautifulsoup4
-pip install ip2geotools
+## Install Dependencies
 ```
+pip install -r requirements.txt
+```
+
+## Testing
+
+#### Scraper
+```
+python src/Scraper.py
+```
+
