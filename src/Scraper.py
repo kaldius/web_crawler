@@ -8,10 +8,13 @@ import time # to get response time
 from bs4 import BeautifulSoup # to parse the webpage
 from ip2geotools.databases.noncommercial import DbIpCity # to get geolocation data
 import re # for search terms
-
+from nltk.stem import WordNetLemmatizer # to convert words to canonical form
+import spacy
+ 
 from ScrapeResult import ScrapeResult
 
 class Scraper:
+    lemmatizer = spacy.load("en_core_web_sm")
 
     def __init__(self, url: str, search_terms: List[str]):
         print('Scraper initialised')
@@ -85,13 +88,23 @@ class Scraper:
         except (socket.gaierror, ValueError):
             return None
 
-    def find_search_terms(soup, search_terms):
-        result = {}
-        for term in search_terms:
-            result[term] = len(soup.find_all(string=re.compile(term)))
+    def find_search_terms(soup, search_terms: List[str]):
+        texts = soup.get_text().split()
+
+        lemmatized_words = Scraper.filter_and_lemmatize(texts)
+        lemmatized_search_terms = Scraper.filter_and_lemmatize(search_terms)
+
+        result = {term: lemmatized_words.count(term) for term in set(lemmatized_search_terms)}
+
         return result
 
+    def filter_and_lemmatize(words: List[str]):
+        lowered_ascii_words = [word.lower() for word in words if word.isascii()]
+        filtered_words = [word for word in lowered_ascii_words if not (word.isnumeric() or not word.isalpha())]
+        return [token.lemma_ for word in filtered_words for token in Scraper.lemmatizer(word)]
+
+
 if __name__ == "__main__":
-    scraper = Scraper("https://www.wikipedia.com", ["Google", "JFESE"])
+    scraper = Scraper("https://en.wikipedia.org/wiki/Lego", ["LeGo", "legos", "businesses", "bUsineSS", "games", "game"])
     result = scraper.scrape()
     print(result)
