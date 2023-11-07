@@ -39,7 +39,7 @@ class Scraper:
         links = Scraper.extract_links_from_response(response)
         links = [urllib.parse.urljoin(self.url, link) for link in links]
 
-        return ScrapeResult(ip_address, response_time, geo_location.region, links)
+        return ScrapeResult(self.url, ip_address, response_time, geo_location.region, links)
         # send the necessary http requests,
         # parse http response and search for search_terms and their frequency of occurance,
         # get geolocation data,

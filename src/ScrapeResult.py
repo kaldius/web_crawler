@@ -2,8 +2,12 @@ import typing
 
 class ScrapeResult:
 
-    def __init__(self, ip_address, response_time, region, links):
+    def __init__(self, url, ip_address, response_time, region, links):
         print('ScrapeResult initialised')
+
+        # URL of the page
+        # Data type: str
+        self.url = url
 
         # IP address of the server
         # Data type: str
