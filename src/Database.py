@@ -43,7 +43,7 @@ class Database:
         urls = []
         with mutexLock:
             for i in range(num_urls):
-                if i > len(self.results['unscrapedUrls']):
+                if not self.results['unscrapedUrls']:
                     break
                 new_url = self.results['unscrapedUrls'].popleft()
                 self.results['urlsBeingScraped'].add(new_url)
