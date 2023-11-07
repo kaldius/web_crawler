@@ -1,5 +1,4 @@
-import typing
-from typing import List, Dict
+from typing import List
 import os
 import threading
 import json
@@ -41,9 +40,6 @@ class Database:
             return initialUrls
 
     def get_new_url(self, num_urls: int = 1) -> List[str]:
-        # look for a url that has not been scraped and return it as a string
-        # if num_urls specified, return that number of urls
-        # if number of available urls < num_urls, just return as many as possible
         urls = []
         with mutexLock:
             for i in range(num_urls):
@@ -55,8 +51,6 @@ class Database:
         return urls
 
     def insert_scrape_result(self, result: ScrapeResult) -> None:
-        # insert the results into the db
-        # set state to scraped for this url
         self.results['urlsBeingScraped'].discard(result.url)
         self.results['scrapedUrls'][result.url] = result.__dict__
         with mutexLock:
