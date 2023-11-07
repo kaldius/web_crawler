@@ -48,7 +48,7 @@ class Scraper:
 
         search_terms_result = Scraper.find_search_terms(soup, self.search_terms)
 
-        return ScrapeResult(ip_address, response_time, geo_location.region, links, search_terms_result)
+        return ScrapeResult(self.url, ip_address, response_time, geo_location.region, links, search_terms_result)
 
     def send_html_request(url):
         # Send an HTTP GET request to the specified URL
