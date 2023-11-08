@@ -25,7 +25,7 @@ class Scraper:
     # put all the data into a ScrapeResult and return it
     # returns None if anything fails
     def scrape(self) -> ScrapeResult:
-        print('Scraper scraping')
+        print(f'Scraping: {self.url}')
 
         ip_address = Scraper.get_ip_address(self.url)
         if not ip_address:

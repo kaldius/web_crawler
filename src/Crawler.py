@@ -28,7 +28,9 @@ class Crawler:
         self.max_num_urls = max_num_urls
         self.max_num_threads = max_num_threads
         self.wait_time = wait_time
-        self.database = Database()
+
+        lemmatized_search_terms = Scraper.filter_and_lemmatize(search_terms)
+        self.database = Database(lemmatized_search_terms)
 
         self.database.load_initial_urls()
 

@@ -15,8 +15,9 @@ class Database:
     storage_directory = os.path.join(dirname, '../data/')
     initial_urls_file = os.path.join(storage_directory, 'initialUrls.txt')
     results_file = os.path.join(storage_directory, 'results.json')
+    frequencies_file = os.path.join(storage_directory, 'frequencies.json')
 
-    def __init__(self):
+    def __init__(self, search_terms):
         print('Database initialised')
         if not os.path.exists(self.storage_directory):
             print(f'Error: data directory does not exist')
@@ -27,6 +28,9 @@ class Database:
             'unscrapedUrls': initialUrls,
             'urlsBeingScraped': set()
         }
+        # keeps a running value of the frequencies, so we don't have to extract from
+        # the large json file later
+        self.search_term_frequency = {term: 0 for term in search_terms}
 
     def isInitialUrlsFileAvailable(self) -> bool:
         return os.path.exists(self.initial_urls_file)
@@ -59,8 +63,17 @@ class Database:
         self.results['urlsBeingScraped'].discard(result.url)
         self.results['scrapedUrls'][result.url] = result.__dict__
         with mutexLock:
+            self.update_search_term_frequency(result.search_terms_result)
             with open(self.results_file, 'w') as resultsFile:
                 resultsFile.write(json.dumps(self.results['scrapedUrls']))
                 for link in result.links:
                     if link not in self.results['scrapedUrls'] and link not in self.results['unscrapedUrls'] and link not in self.results['urlsBeingScraped']:
                         self.results['unscrapedUrls'].append(link)
+
+    def update_search_term_frequency(self, result: dict):
+        for k in self.search_term_frequency.keys():
+            if k not in result:
+                continue
+            self.search_term_frequency[k] += result[k]
+        with open(self.frequencies_file, 'w') as frequenciesFile:
+            frequenciesFile.write(json.dumps(self.search_term_frequency))
