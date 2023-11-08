@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup # to parse the webpage
 from ip2geotools.databases.noncommercial import DbIpCity # to get geolocation data
 import re # for search terms
 import spacy # to convert words to canonical form
- 
+
 from ScrapeResult import ScrapeResult
 
 class Scraper:
