@@ -50,6 +50,11 @@ class Database:
                 urls.append(new_url)
         return urls
 
+    def get_no_of_scraped_url(self):
+        with mutexLock:
+            size = len(self.results['scrapedUrls']) + len(self.results['urlsBeingScraped'])
+        return size
+
     def insert_scrape_result(self, result: ScrapeResult) -> None:
         self.results['urlsBeingScraped'].discard(result.url)
         self.results['scrapedUrls'][result.url] = result.__dict__
