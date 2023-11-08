@@ -90,9 +90,8 @@ class Scraper:
         texts = soup.get_text().split()
 
         lemmatized_words = Scraper.filter_and_lemmatize(texts)
-        lemmatized_search_terms = Scraper.filter_and_lemmatize(search_terms)
 
-        result = {term: lemmatized_words.count(term) for term in set(lemmatized_search_terms)}
+        result = {term: lemmatized_words.count(term) for term in set(search_terms)}
 
         return result
 
