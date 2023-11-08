@@ -1,5 +1,5 @@
-import typing
-import json 
+import json
+
 
 class ScrapeResult:
 
@@ -30,10 +30,13 @@ class ScrapeResult:
         # Considering a dictionary mapping some search terms to their frequency of occurance
         self.search_terms_result = search_terms_result
 
+    def get_links(self):
+        return self.links
+
     def __str__(self):
         first = (f"IP Address: {self.server_ip}\n"
-                f"Response Time: {self.response_time}\n"
-                f"Server Region: {self.server_region}")
+                 f"Response Time: {self.response_time}\n"
+                 f"Server Region: {self.server_region}")
         second = "Links:\n" + "\n".join(self.links)
         third = json.dumps(self.search_terms_result)
         return "\n".join([first, second, third])

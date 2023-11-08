@@ -1,16 +1,15 @@
-import typing
+import socket  # to resolve ip address given hostname
+import time  # to get response time
+import urllib.parse  # to parse hostname given url
 from typing import List
 
-import socket # to resolve ip address given hostname
-import urllib.parse # to parse hostname given url
-import requests # to send http requests
-import time # to get response time
-from bs4 import BeautifulSoup # to parse the webpage
-from ip2geotools.databases.noncommercial import DbIpCity # to get geolocation data
-import re # for search terms
-import spacy # to convert words to canonical form
- 
+import requests  # to send http requests
+import spacy  # to convert words to canonical form
+from bs4 import BeautifulSoup  # to parse the webpage
+from ip2geotools.databases.noncommercial import DbIpCity  # to get geolocation data
+
 from ScrapeResult import ScrapeResult
+
 
 class Scraper:
     lemmatizer = spacy.load("en_core_web_sm")
@@ -39,7 +38,7 @@ class Scraper:
         if not tmp:
             print("Failed to send html request")
             return None
-        
+
         response, response_time = tmp
 
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -52,7 +51,7 @@ class Scraper:
 
     def send_html_request(url):
         # Send an HTTP GET request to the specified URL
-        try:            
+        try:
             start_time = time.time()
             response = requests.get(url, timeout=5)
             end_time = time.time()
@@ -104,6 +103,7 @@ class Scraper:
 
 
 if __name__ == "__main__":
-    scraper = Scraper("https://en.wikipedia.org/wiki/Lego", ["LeGo", "legos", "businesses", "bUsineSS", "games", "game"])
+    scraper = Scraper("https://en.wikipedia.org/wiki/Lego",
+                      ["LeGo", "legos", "businesses", "bUsineSS", "games", "game"])
     result = scraper.scrape()
     print(result)
