@@ -42,7 +42,10 @@ class Crawler:
     def start(self):
         print(f'starting Scrapers')
         with ThreadPoolExecutor(max_workers=self.max_num_threads) as executor:
-            return executor.map(self.crawl_url(), timeout=60)
+            for i in range(self.max_num_threads):
+                executor.submit(self.crawl_url)
+
+            executor.shutdown()
 
     '''
     Loops while queue of urls to crawl is < max number of urls (depth limit).

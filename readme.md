@@ -11,10 +11,3 @@ python -m spacy download en_core_web_sm
 python src/main.py
 ```
 Response times to the servers, IP addresses and geolocation of the servers will be written to `data/results.json`, along with all URLs found within the webpage.
-## Testing
-
-#### Scraper
-```
-python src/Scraper.py
-```
-
